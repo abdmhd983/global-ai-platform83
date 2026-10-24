@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexusAI Pro | المنصة السحابية المتقدمة لأتمتة المحتوى وخدمات Web3</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+darkMode: 'class',
+theme: {
+extend: {
+colors: {
+brand: {
+50: '#f0fdf4',
+500: '#22c55e',
+600: '#16a34a',
+700: '#15803d',
+900: '#14532d',
+}
+}
+}
+}
+}
+</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; }
+.glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+</style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
+
+<!-- Navbar -->
+<header class="sticky top-0 z-50 glass border-b border-slate-800">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<div class="flex items-center space-x-3 space-x-reverse">
+<div class="bg-gradient-to-tr from-brand-600 to-indigo-600 p-2 rounded-xl text-white">
+<i class="fa-solid fa-brain text-xl"></i>
+</div>
+<span class="text-xl font-bold bg-gradient-to-r from-white via-slate-200 to-brand-500 bg-clip-text text-transparent">NexusAI Studio</span>
+</div>
+
+<!-- Wallet Connection -->
+<button id="connectWalletBtn" onclick="connectWallet()" class="flex items-center gap-2 bg-gradient-to-r from-brand-600 to-emerald-600 hover:from-brand-500 hover:to-emerald-500 text-white font-medium px-4 py-2 rounded-xl transition duration-200 shadow-lg shadow-brand-900/30">
+<i class="fa-solid fa-wallet"></i>
+<span id="walletText">ربط المحفظة (USDT)</span>
+</button>
+</div>
+</header>
+
+<!-- Main Layout -->
+<div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-8">
+
+<!-- Sidebar Navigation -->
+<aside class="w-full md:w-64 glass rounded-2xl p-4 flex flex-col gap-2 h-fit">
+<div class="text-xs font-semibold text-slate-400 px-3 py-2 uppercase tracking-wider">الخدمات الرئيسية</div>
+<button onclick="switchTab('content-planner')" id="btn-planner" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-slate-200 bg-slate-800/80 border border-brand-500/30 text-right w-full">
+<i class="fa-solid fa-calendar-check text-brand-500"></i>
+<span>مولد الخطط الشهرية</span>
+</button>
+<button onclick="switchTab('reels-script')" id="btn-reels" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 text-right w-full transition">
+<i class="fa-solid fa-clapperboard text-indigo-400"></i>
+<span>سيناريو المونتاج وReels</span>
+</button>
+<button onclick="switchTab('summarizer')" id="btn-sum" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 text-right w-full transition">
+<i class="fa-solid fa-file-contract text-amber-400"></i>
+<span>تلخيص وتحليل المحتوى</span>
+</button>
+<button onclick="switchTab('web3-pricing')" id="btn-pay" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 text-right w-full transition">
+<i class="fa-solid fa-gem text-emerald-400"></i>
+<span>الاشتراكات وWeb3 Escrow</span>
+</button>
+</aside>
+
+<!-- Main Content Area -->
+<main class="flex-1">
+
+<!-- Service 1: Content Planner -->
+<section id="tab-content-planner" class="glass rounded-2xl p-6 sm:p-8 space-y-6">
+<div>
+<h2 class="text-2xl font-bold text-white mb-1"><i class="fa-solid fa-calendar-check text-brand-500 ml-2"></i>مولد خطط المحتوى المتكاملة</h2>
+<p class="text-slate-400 text-sm">أدخل مجال عملك واستخرج خطة منشورات وسيناريوهات لشهر كامل بالذكاء الاصطناعي.</p>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-300 mb-2">مجال العمل / النشاط التجاري</label>
+<input type="text" id="nicheInput" placeholder="مثال: متجر إلكتروني، خدمات مونتاج، برمجة وتطوير..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-brand-500">
+</div>
+<button onclick="generatePlan()" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
+<i class="fa-solid fa-wand-magic-sparkles"></i>
+<span>توليد الخطة بالذكاء الاصطناعي</span>
+</button>
+</div>
+<div id="plannerResult" class="hidden bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-3">
+<h3 class="text-lg font-bold text-brand-400">الخطة الشهرية المقترحة:</h3>
+<div id="plannerText" class="text-slate-300 text-sm leading-relaxed whitespace-pre-line"></div>
+</div>
+</section>
+
+<!-- Service 2: Reels & Shorts Scripts -->
+<section id="tab-reels-script" class="glass rounded-2xl p-6 sm:p-8 space-y-6 hidden">
+<div>
+<h2 class="text-2xl font-bold text-white mb-1"><i class="fa-solid fa-clapperboard text-indigo-400 ml-2"></i>صانع سيناريوهات المونتاج وReels</h2>
+<p class="text-slate-400 text-sm">صمم سيناريو دقيق للفيديوهات القصيرة مشتملاً على زوايا الكاميرا وتوقيتات المونتاج.</p>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-300 mb-2">عنوان أو فكرة الفيديو</label>
+<input type="text" id="videoIdea" placeholder="مثال: 3 أسرار لتسريع مونتاج CapCut..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-indigo-500">
+</div>
+<button onclick="generateScript()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
+<i class="fa-solid fa-film"></i>
+<span>إنشاء سيناريو المونتاج</span>
+</button>
+</div>
+<div id="scriptResult" class="hidden bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-3">
+<h3 class="text-lg font-bold text-indigo-400">سكربت المونتاج التفصيلي:</h3>
+<div id="scriptText" class="text-slate-300 text-sm leading-relaxed whitespace-pre-line"></div>
+</div>
+</section>
+
+<!-- Service 3: Summarizer -->
+<section id="tab-summarizer" class="glass rounded-2xl p-6 sm:p-8 space-y-6 hidden">
+<div>
+<h2 class="text-2xl font-bold text-white mb-1"><i class="fa-solid fa-file-contract text-amber-400 ml-2"></i>محلل وملخص النصوص والمقالات</h2>
+<p class="text-slate-400 text-sm">ضع أي نص طويل، مقال، أو تفريغ فيديو للحصول على استخراج سريع للأفكار والهاشتاغات.</p>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-sm font-medium text-slate-300 mb-2">النص المراد تحليله</label>
+<textarea id="longText" rows="5" placeholder="أدخل النص هنا..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500"></textarea>
+</div>
+<button onclick="summarizeText()" class="w-full bg-amber-600 hover:bg-amber-500 text-white font-semibold py-3 rounded-xl transition flex items-center justify-center gap-2">
+<i class="fa-solid fa-bolt"></i>
+<span>تحليل واستخراج النقاط</span>
+</button>
+</div>
+<div id="sumResult" class="hidden bg-slate-900/90 border border-slate-800 rounded-xl p-5 space-y-3">
+<h3 class="text-lg font-bold text-amber-400">الملخص والهاشتاغات:</h3>
+<div id="sumText" class="text-slate-300 text-sm leading-relaxed whitespace-pre-line"></div>
+</div>
+</section>
+
+<!-- Service 4: Web3 Pricing & Payments -->
+<section id="tab-web3-pricing" class="glass rounded-2xl p-6 sm:p-8 space-y-6 hidden">
+<div>
+<h2 class="text-2xl font-bold text-white mb-1"><i class="fa-solid fa-gem text-emerald-400 ml-2"></i>بوابة الاشتراكات والدفع عبر Web3</h2>
+<p class="text-slate-400 text-sm">دفع إلكتروني مباشر وآمن بـ USDT عبر عقد الضمان On-chain مباشرة لمحفظتك.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+<!-- Starter Plan -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-4">
+<div>
+<span class="text-xs font-bold bg-slate-800 text-slate-300 px-3 py-1 rounded-full">باقة الأعمال الاحترافية</span>
+<div class="text-3xl font-extrabold text-white mt-4">25 USDT <span class="text-xs text-slate-400 font-normal">/ شهرياً</span></div>
+<ul class="text-sm text-slate-300 space-y-2 mt-4">
+<li><i class="fa-solid fa-check text-brand-500 ml-2"></i>توليد غير محدود لخطط المحتوى</li>
+<li><i class="fa-solid fa-check text-brand-500 ml-2"></i>سكربتات مونتاج Reels وسيناريوهات سينمائية</li>
+<li><i class="fa-solid fa-check text-brand-500 ml-2"></i>تحليل وتلخيص الملفات غير المحدود</li>
+</ul>
+</div>
+<button onclick="payUSDT(25)" class="w-full bg-brand-600 hover:bg-brand-500 text-white font-semibold py-3 rounded-xl transition">
+اشتراك بـ 25 USDT
+</button>
+</div>
+
+<!-- Enterprise Plan -->
+<div class="bg-gradient-to-b from-slate-900 to-slate-900/80 border border-brand-500/50 rounded-2xl p-6 flex flex-col justify-between space-y-4 relative overflow-hidden">
+<div class="absolute -left-12 -top-12 w-24 h-24 bg-brand-500/20 rounded-full blur-xl"></div>
+<div>
+<span class="text-xs font-bold bg-brand-500/20 text-brand-400 border border-brand-500/30 px-3 py-1 rounded-full">الباقة الشاملة VIP</span>
+<div class="text-3xl font-extrabold text-white mt-4">50 USDT <span class="text-xs text-slate-400 font-normal">/ شهرياً</span></div>
+<ul class="text-sm text-slate-300 space-y-2 mt-4">
+<li><i class="fa-solid fa-check text-brand-500 ml-2"></i>جميع مميزات الباقة الاحترافية</li>
+<li><i class="fa-solid fa-check text-brand-500 ml-2"></i>عقد ضمان Escrow مخصص للشركات</li>
+<li><i class="fa-solid fa-check text-brand-500 ml-2"></i>دعم شخصي وأولوية المعالجة</li>
+</ul>
+</div>
+<button onclick="payUSDT(50)" class="w-full bg-gradient-to-r from-brand-600 to-emerald-600 hover:from-brand-500 hover:to-emerald-500 text-white font-semibold py-3 rounded-xl transition">
+اشتراك بـ 50 USDT
+</button>
+</div>
+</div>
+</section>
+
+</main>
+</div>
+
+<!-- JavaScript Application Logic -->
+<script>
+let connectedAccount = null;
+
+// Navigation Tabs Handling
+function switchTab(tabId) {
+document.querySelectorAll('main > section').forEach(el => el.classList.add('hidden'));
+document.getElementById('tab-' + tabId).classList.remove('hidden');
+
+document.querySelectorAll('.nav-btn').forEach(btn => {
+btn.classList.remove('bg-slate-800/80', 'border', 'border-brand-500/30', 'text-slate-200');
+btn.classList.add('text-slate-400');
+});
+
+const activeBtn = document.getElementById('btn-' + (tabId === 'content-planner' ? 'planner' : tabId === 'reels-script' ? 'reels' : tabId === 'summarizer' ? 'sum' : 'pay'));
+if(activeBtn) {
+activeBtn.classList.add('bg-slate-800/80', 'border', 'border-brand-500/30', 'text-slate-200');
+activeBtn.classList.remove('text-slate-400');
+}
+}
+
+// Web3 Wallet Connection Simulation / Provider Integration
+async function connectWallet() {
+if (typeof window.ethereum !== 'undefined') {
+try {
+const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+connectedAccount = accounts[0];
+const shortAddr = connectedAccount.substring(0, 6) + '...' + connectedAccount.substring(connectedAccount.length - 4);
+document.getElementById('walletText').innerText = shortAddr;
+alert('تم ربط محفظتك بنجاح: ' + connectedAccount);
+} catch (error) {
+alert('تعذر الاتصال بالمحفظة.');
+}
+} else {
+alert('محفظة Trust Wallet / MetaMask غير متصلة مباشرة بالمتصفح. يرجى فتح الموقع من داخل متصفح التطبيق الخاص بالمحفظة.');
+}
+}
+
+// Service 1: AI Content Planner Simulation Logic
+function generatePlan() {
+const niche = document.getElementById('nicheInput').value;
+if(!niche) { alert('يرجى أدخال مجال العمل أولاً'); return; }
+
+const resDiv = document.getElementById('plannerResult');
+const resText = document.getElementById('plannerText');
+resDiv.classList.remove('hidden');
+resText.innerText = "جاري معالجة البيانات بواسطة الذكاء الاصطناعي...\n\n" +
+"🗓️ الأسبوع الأول: تقديم مشكلة أساسية يواجهها الجمهور في مجال (" + niche + ") وطرح الحل.\n" +
+"🎥 الأسبوع الثاني: فيديو Reels تعليمي قصير مدته 30 ثانية يعرض خطوات سريعة.\n" +
+"💡 الأسبوع الثالث: منشور نصي تحليلي يستعرض مقارنة وتحديثات السوق.\n" +
+"🚀 الأسبوع الرابع: عرض خاص ودعوة مباشرة لاتخاذ إجراء (Call to Action).";
+}
+
+// Service 2: Reels Script Generator Logic
+function generateScript() {
+const idea = document.getElementById('videoIdea').value;
+if(!idea) { alert('يرجى أدخال فكرة الفيديو أولاً'); return; }
+
+const resDiv = document.getElementById('scriptResult');
+const resText = document.getElementById('scriptText');
+resDiv.classList.remove('hidden');
+resText.innerText = "🎬 الخطاف (0-3 ثوانٍ): "هل تعلم أن " + idea + " هو السبب في مضاعفة النتائج؟"\n\n" +
+"📹 المشهد 1 (3-15 ثانية): عرض زاوية قريبة للعمل مع نص تحفيزي في أسفل الشاشة.\n" +
+"✂️ الانتقال (15-25 ثانية): تسريع لقطات المونتاج والتطبيق العملي.\n" +
+"🎯 النهاية (25-30 ثانية): احفظ المقطع وشاركه مع زملائك!";
+}
+
+// Service 3: Summarizer Logic
+function summarizeText() {
+const text = document.getElementById('longText').value;
+if(!text) { alert('يرجى أدخال النص المراد تحليله'); return; }
+
+const resDiv = document.getElementById('sumResult');
+const resText = document.getElementById('sumText');
+resDiv.classList.remove('hidden');
+resText.innerText = "📌 النقاط الرئيسية:\n" +
+"1. التركيز على تقديم قيمة مباشرة بدون مقدمات طويلة.\n" +
+"2. استغلال الأدوات المجانية لتوفير التكاليف الأوليّة.\n\n" +
+"🏷️ الهاشتاغات المقترحة:\n#ذكاء_اصطناعي #صناعة_المحتوى #مونتاج #تطوير_الرقميات";
+}
+
+// Payment Execution via Wallet
+function payUSDT(amount) {
+if(!connectedAccount) {
+alert('يرجى ربط محفظتك أولاً عبر الزر أعلى الصفحة لاستكمال حجز الاشتراك.');
+connectWallet();
+} else {
+alert('سيتم فتح محفظتك الآن لتحويل ' + amount + ' USDT إلى عقد الضمان المنشور.');
+}
+}
+</script>
+</body>
+</html>
+
